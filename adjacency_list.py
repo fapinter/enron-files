@@ -13,13 +13,8 @@ class graph:
         if id not in self.adjacency_list.keys():
             self.adjacency_list[id]
             self.order +=1
-        else:
-            print(f"node {id} already in the list")
 
     def add_edge(self, id_1, id_2):
-        if id_1 == id_2:
-            print("loops not supported")
-            return
 
         #Verifying if the nodes are added to the graph already
         if id_1 not in self.adjacency_list.keys():
@@ -33,10 +28,9 @@ class graph:
             for i, (id_, weight) in enumerate(self.adjacency_list[id_1]):
                 if id_2 == id_:
                     self.adjacency_list[id_1][i] = (id_, weight+1)
-                    return
-        
-        self.adjacency_list[id_1].append((id_2, 1))
-        self.size +=1
+        else:        
+            self.adjacency_list[id_1].append((id_2, 1))
+            self.size +=1
         
     
     def remove_edge(self, id_1, id_2):
@@ -93,7 +87,7 @@ class graph:
             return temp_list[0]
     
     def print_adjacency_list(self):
-        print("*** Adjacency List ***")
+        print("*** Adjacency List ***\n")
 
         for key in self.adjacency_list.keys():
             print(f'{key}: ', end="")
@@ -101,11 +95,5 @@ class graph:
             for id, value in self.adjacency_list[key]:
                 print(f'({id}, {value})', end=" -> ")
                 
-            print()
+            print("\n")
         print("*"*22)
-
-
-#Coisas para alterar:
-#1. adicionar as funcoes a mais do tde-3
-#---criar vertice no read files
-#---alterar add_edge, tirar peso de parametro, caso a aresta exista aumentar em +1

@@ -12,8 +12,7 @@ def readFiles(main_directory, graph):
 
             for k in layer3_path:
                 file_path = absolute_path+"/"+i+"/"+j+"/"+k
-                searching = True
-                isolated = False
+
 
                 #Some folders are still found in this directory layer
                 #The try except structure avoids code breaking in this situations
@@ -23,6 +22,9 @@ def readFiles(main_directory, graph):
                         sender = lines[2].strip()
                         sender = sender.lstrip("From: ")
 
+
+                        searching = True
+                        isolated = False
                         line_it = 3
                         list_contacts = list()
                         #Performs a complete search of all emails that can be in the file
@@ -44,10 +46,10 @@ def readFiles(main_directory, graph):
                         if not isolated:
                             graph.add_node(sender)
 
-                        for item in list_contacts:
-                            graph.add_edge(sender, item)
+                            for item in list_contacts:
+                                graph.add_edge(sender, item)
                 #Treatment for folders found on this directory layer
-                except(IsADirectoryError) as e:
+                except(IsADirectoryError, PermissionError) as e:
                     layer4_path = os.listdir(file_path)
 
                     for w in layer4_path:
@@ -58,6 +60,8 @@ def readFiles(main_directory, graph):
                             sender = lines[2].strip()
                             sender = sender.lstrip("From: ")
 
+                            searching = True
+                            isolated = False
                             line_it = 3
                             list_contacts = list()
                             #Performs a complete search of all emails that can be in the file
@@ -76,3 +80,21 @@ def readFiles(main_directory, graph):
 
                                     list_contacts.extend([email.strip() for email in curr_line.split(',') if email.strip()])
                                     line_it += 1
+                            
+                            if not isolated:
+                                graph.add_node(sender)
+                                for item in list_contacts:
+                                    graph.add_edge(sender, item)
+
+def send_to_txt(graph):
+    with open('graph_structure.txt', 'w', encoding="utf-8") as f:
+        f.write("*** Adjacency List ***\n")
+
+        for key in graph.adjacency_list.keys():
+            f.write(f'{key}:\n')
+
+            for id, value in graph.adjacency_list[key]:
+                f.write(f'\t({id}, {value}) ->\n')
+                
+            f.write("\n")
+        f.write("*"*22)

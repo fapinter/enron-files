@@ -3,10 +3,14 @@ import adjacency_list as al
 
 graph = al.graph()
 
-fr.readFiles("enron-2016", graph)
+fr.readFiles("./enron-2016", graph)
 
-graph.print_adjacency_list()
+#graph.print_adjacency_list()
 print(graph.order)
 print(graph.size)
 
 
+fr.send_to_txt(graph)
+
+#TO-DO LIST:
+#
