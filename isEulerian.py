@@ -1,11 +1,8 @@
-
-#não sei se podia usar bibliotecas externas pra fazer essa checagem ent fiz sem pra garantir, faps tira isso do codigo final pra n ficar feio ;P
-
 def is_eulerian_directed(G):
     # Get all "active" nodes, meaning nodes with at least one incoming or outgoing edge
     active_nodes = [node for node in G.adjacency_list if G.out_degree(node) > 0 or G.in_degree(node) > 0]
 
-    # Check if all actibe nodes have equal in-degree and out-degree
+    # Check if all active nodes have equal in-degree and out-degree
     # (required condition for an Eulerian circuit in directed graphs)
     unbalanced_nodes = [
         node for node in active_nodes 

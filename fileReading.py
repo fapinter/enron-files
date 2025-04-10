@@ -4,6 +4,7 @@ def readFiles(main_directory, graph):
     absolute_path = main_directory
     layer1_path = os.listdir(absolute_path)
 
+    #Travels through the main directories until it reaches the files
     for i in layer1_path:
         layer2_path = os.listdir(f"{absolute_path}/{i}")
         
@@ -34,7 +35,7 @@ def readFiles(main_directory, graph):
                             if curr_line.startswith("Subject:"):
                                 searching = False
                                 
-                                #Email not sent, just written, doesnt add to the graph
+                                #Email has no "To: " isolated nodes aren't added to the graph
                                 if line_it == 3:
                                     isolated = True
                             else:
@@ -48,10 +49,15 @@ def readFiles(main_directory, graph):
 
                             for item in list_contacts:
                                 graph.add_edge(sender, item)
+
                 #Treatment for folders found on this directory layer
+                #isADirectory and Permission Error are both the same Error,
+                #but the first is the error generated on linux and second
+                #is the error generated on Windows
                 except(IsADirectoryError, PermissionError) as e:
                     layer4_path = os.listdir(file_path)
 
+                    #Adds another listdir to make sure the entire folder is searched
                     for w in layer4_path:
                         new_file_path = file_path + "/"+ w
 
@@ -86,6 +92,8 @@ def readFiles(main_directory, graph):
                                 for item in list_contacts:
                                     graph.add_edge(sender, item)
 
+
+#After the graph is loaded, this function can be called to pass the structure to a .txt
 def send_to_txt(graph):
     with open('graph_structure.txt', 'w', encoding="utf-8") as f:
         f.write("*** Adjacency List ***\n")

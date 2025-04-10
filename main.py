@@ -1,7 +1,7 @@
 import fileReading as fr  # Importa módulo para leitura de arquivos
 import adjacency_list as al  # Importa módulo de implementação da lista de adjacência
 import isEulerian as ie  # Importa módulo para verificar se o grafo é euleriano
-
+import top20 as tp
 # Cria uma instância de grafo utilizando a estrutura de lista de adjacência
 graph = al.graph()
 
@@ -40,3 +40,5 @@ if graph.order > 0:  # Verifica se o grafo não está vazio
 #print("É Euleriano?", ie.is_eulerian_directed(graph))  # Comentado, verificação se o grafo é euleriano
 #TO-DO LIST:
 #supostamente a 3 esta correta, em caso de bug acahdo me avisar ps:simini
+
+tp.top20_outdegree(graph)

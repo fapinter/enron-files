@@ -1,5 +1,5 @@
 from collections import defaultdict
-import copy
+import copy   #Import used to the remove_edge function
 import heapq  # Add import for priority queue
 
 class graph:
