@@ -1,5 +1,6 @@
 from collections import defaultdict
 import copy
+import heapq  # Add import for priority queue
 
 class graph:
     def __init__(self):
@@ -97,3 +98,81 @@ class graph:
                 
             print("\n")
         print("*"*22)
+        
+    def vertices_within_distance(self, start_vertex, max_distance):
+        """
+        Retorna uma lista com todos os vértices que estão localizados até uma distância D
+        de um vértice N, onde D é a soma dos pesos ao longo do caminho mais curto entre dois vértices.
+        
+        Esta implementação utiliza o algoritmo de Dijkstra com fila de prioridade para eficiência,
+        tornando-a adequada para grafos com milhares de vértices e arestas.
+        
+        Args:
+            start_vertex: O vértice inicial (N)
+            max_distance: Distância máxima permitida (D), inclusive
+            
+        Returns:
+            Uma lista com os IDs de todos os vértices que estão a uma distância menor ou igual a max_distance
+            do vértice inicial (incluindo o próprio vértice inicial)
+        
+        Complexidade de Tempo: O((V + E) log V) onde V é o número de vértices e E é o número de arestas
+        Complexidade de Espaço: O(V)
+        """
+        # Verifica se o vértice inicial existe no grafo
+        if start_vertex not in self.adjacency_list:
+            return []
+            
+        # Inicializa as distâncias com infinito para todos os vértices, exceto o inicial
+        # O dicionário 'distances' armazena a menor distância conhecida até cada vértice
+        distances = {vertex: float('infinity') for vertex in self.adjacency_list}
+        distances[start_vertex] = 0
+        
+        # Conjunto para controlar vértices já visitados e evitar processamento redundante
+        # Um vértice é considerado 'visitado' quando já encontramos o caminho mais curto até ele
+        visited = set()
+        
+        # Fila de prioridade para o algoritmo de Dijkstra
+        # Formato: (distância, vértice) - ordenada pela distância (menor primeiro)
+        # Usamos heapq para implementar a fila de prioridade de forma eficiente
+        priority_queue = [(0, start_vertex)]
+        
+        # Processa os vértices em ordem crescente de distância
+        while priority_queue:
+            # Extrai o vértice com menor distância atual da fila
+            current_distance, current_vertex = heapq.heappop(priority_queue)
+            
+            # Pula se já processamos este vértice (já encontramos o caminho mais curto)
+            if current_vertex in visited:
+                continue
+                
+            # Marca como visitado, pois agora temos certeza do caminho mais curto até ele
+            visited.add(current_vertex)
+            
+            # Se a distância atual excede a distância máxima, não é necessário explorar
+            # os vizinhos deste vértice, pois todos estarão além da distância máxima
+            if current_distance > max_distance:
+                continue
+                
+            # Explora todos os vizinhos do vértice atual
+            for neighbor, weight in self.adjacency_list[current_vertex]:
+                # Pula vizinhos já visitados, pois já temos o caminho mais curto para eles
+                if neighbor in visited:
+                    continue
+                    
+                # Calcula a nova distância para este vizinho
+                # É a soma da distância até o vértice atual mais o peso da aresta
+                distance = current_distance + weight
+                
+                # Se encontramos um caminho mais curto para o vizinho, atualizamos
+                if distance < distances[neighbor]:
+                    distances[neighbor] = distance
+                    # Adiciona o vizinho à fila de prioridade com sua nova distância
+                    heapq.heappush(priority_queue, (distance, neighbor))
+        
+        # Coleta todos os vértices dentro da distância máxima permitida
+        # Um vértice está dentro da distância se sua menor distância conhecida 
+        # é menor ou igual à distância máxima especificada
+        result = [vertex for vertex, distance in distances.items() 
+                 if distance <= max_distance]
+        
+        return result
