@@ -24,6 +24,7 @@ def is_eulerian_directed(G):
             visited = set()
             queue = deque([start_node])
 
+            #FIFO Queue Management(First In First Out)
             while queue:
                 current = queue.popleft()
                 if current not in visited:
@@ -62,7 +63,7 @@ def is_eulerian_directed(G):
         # If the graph is not Eulerian, explain why and show the issues
         print("Conditions for an Eulerian cycle NOT satisfied:")
         if unbalanced_nodes:
-            print(f"  - Nodes with unbalanced degree (in ≠ out): {unbalanced_nodes}")
+            print(f"  - Number of nodes with unbalanced degree (in ≠ out): {len(unbalanced_nodes)}")
         if not connected:
             print("  - The graph is not strongly connected.")
     else:

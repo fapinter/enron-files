@@ -9,14 +9,17 @@ graph = al.graph()
 # Carrega os dados do grafo a partir dos arquivos na pasta enron-2016
 # Isso construirá o grafo com os emails da base de dados Enron
 fr.readFiles("./enron-2016", graph)
+# Salva o grafo em um arquivo de texto para análise posterior
+fr.send_to_txt(graph)
 
 # Imprime estatísticas básicas do grafo
 #graph.print_adjacency_list()  # Comentado para não sobrecarregar a saída
-print(f"Número de vértices: {graph.order}")  # Exibe a quantidade de vértices (ordem do grafo)
-print(f"Número de arestas: {graph.size}")  # Exibe a quantidade de arestas (tamanho do grafo)
-
-# Salva o grafo em um arquivo de texto para análise posterior
-fr.send_to_txt(graph)
+print("\n","*"*40)
+print(f"Número de vértices: {graph.get_order()}")  # Exibe a quantidade de vértices (ordem do grafo)
+print(f"Número de arestas: {graph.get_size()}")  # Exibe a quantidade de arestas (tamanho do grafo)
+print("\n","*"*40)
+print("É Euleriano?", ie.is_eulerian_directed(graph))
+print("\n","*"*40)
 
 # Verificação da função vertices_within_distance com o grafo enron-2016
 if graph.order > 0:  # Verifica se o grafo não está vazio
@@ -38,16 +41,25 @@ if graph.order > 0:  # Verifica se o grafo não está vazio
         if vertices_proximos:
             print(f"Primeiros 5 vértices (de {len(vertices_proximos)}): {vertices_proximos[:5]}")
 
-#print("É Euleriano?", ie.is_eulerian_directed(graph))  # Comentado, verificação se o grafo é euleriano
-#TO-DO LIST:
-#supostamente a 3 esta correta, em caso de bug acahdo me avisar ps:simini
 
+#Busca o Top 20 dos vértices com maior grau de Sáida e Entrada respectivamente
+print("\n","*"*40)
+print("Top 20 Nodes with the highest Out Degree")
+print("\n","*"*40)
 tp.top20_outdegree(graph)
+print("\n","*"*40)
+print("Top 20 Nodes with the highest In Degree")
+print("\n","*"*40)
+tp.top20_indegree(graph)
+print("\n","*"*40)
 
-print("\nCalculando o diâmetro do grafo, aguarde...")   
+#Cálculo do diâmetro do grafo (maior caminho mínimo entre qualquer par de vértices)
+print("\nCalculando o diâmetro do grafo, aguarde...")
 diametro, caminho = dg.calcular_diametro(graph.adjacency_list)
 
 print("\nDiâmetro do grafo:", diametro)
 print("Caminho correspondente:")
 for i, v in enumerate(caminho):
     print(f"{i+1}. {v}")
+
+print("\n","*"*40)

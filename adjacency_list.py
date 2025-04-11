@@ -9,6 +9,12 @@ class graph:
         #Dict of key value
         #(Node, list of tuple(node, weight))
         self.adjacency_list = defaultdict(list)
+
+    def get_order(self):
+        return self.order
+    
+    def get_size(self):
+        return self.size
     
     def add_node(self, id):
         if id not in self.adjacency_list.keys():
