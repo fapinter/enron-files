@@ -2,6 +2,7 @@ import fileReading as fr  # Importa módulo para leitura de arquivos
 import adjacency_list as al  # Importa módulo de implementação da lista de adjacência
 import isEulerian as ie  # Importa módulo para verificar se o grafo é euleriano
 import top20 as tp
+import dijkstra as dg  # Importa módulo para calcular o diâmetro do grafo
 # Cria uma instância de grafo utilizando a estrutura de lista de adjacência
 graph = al.graph()
 
@@ -42,3 +43,11 @@ if graph.order > 0:  # Verifica se o grafo não está vazio
 #supostamente a 3 esta correta, em caso de bug acahdo me avisar ps:simini
 
 tp.top20_outdegree(graph)
+
+print("\nCalculando o diâmetro do grafo, aguarde...")   
+diametro, caminho = dg.calcular_diametro(graph.adjacency_list)
+
+print("\nDiâmetro do grafo:", diametro)
+print("Caminho correspondente:")
+for i, v in enumerate(caminho):
+    print(f"{i+1}. {v}")
